@@ -6,9 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.compose.viewmodel.koinViewModel
-import org.koin.core.module.dsl.viewModelOf
 
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel = koinViewModel<SettingsViewModel>()) {

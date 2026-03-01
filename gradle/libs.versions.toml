@@ -17,7 +17,7 @@ iconsCore = "1.7.3"
 androidx-nav3 = "1.0.0-alpha06"
 navigation3-browser = "0.3.1"
 kotlinx-serialization = "1.9.0"
-koin = "4.0.4"
+koin = "4.1.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
