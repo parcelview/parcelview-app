@@ -1,4 +1,4 @@
-package dev.parcelview.app.screens
+package dev.parcelview.feature.parcels.impl
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,11 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.koin.compose.viewmodel.koinViewModel
 
 private val dummyParcels = listOf("TRK-001", "TRK-002", "TRK-003")
 
 @Composable
-fun ParcelsListScreen(onParcelClick: (String) -> Unit) {
+fun ParcelsListScreen(onParcelClick: (String) -> Unit, viewModel: ParcelsViewModel = koinViewModel<ParcelsViewModel>()) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(dummyParcels) { trackingId ->
             ListItem(

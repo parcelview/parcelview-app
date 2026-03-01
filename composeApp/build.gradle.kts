@@ -55,6 +55,14 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.nav3.ui)
             implementation(libs.compose.material.icons)
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(project(":feature:parcels:public"))
+            implementation(project(":feature:parcels:impl")) // Update in next PR when we have interface entries
+            implementation(project(":feature:scanner:public"))
+            implementation(project(":feature:scanner:impl")) // Update in next PR when we have interface entries
+            implementation(project(":feature:settings:public"))
+            implementation(project(":feature:settings:impl")) // Update in next PR when we have interface entries
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

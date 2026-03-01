@@ -1,4 +1,4 @@
-package dev.parcelview.app.screens
+package dev.parcelview.feature.parcels.impl
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

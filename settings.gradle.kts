@@ -29,3 +29,9 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":feature:parcels:public")
+include(":feature:parcels:impl")
+include(":feature:scanner:public")
+include(":feature:scanner:impl")
+include(":feature:settings:public")
+include(":feature:settings:impl")

@@ -18,15 +18,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
-import dev.parcelview.app.navigation.ParcelDetail
-import dev.parcelview.app.navigation.ParcelsList
-import dev.parcelview.app.navigation.Scanner
-import dev.parcelview.app.navigation.Settings
-import dev.parcelview.app.navigation.Tab
-import dev.parcelview.app.screens.ParcelDetailScreen
-import dev.parcelview.app.screens.ParcelsListScreen
-import dev.parcelview.app.screens.ScannerScreen
-import dev.parcelview.app.screens.SettingsScreen
+import dev.parcelview.feature.parcels.ParcelDetail
+import dev.parcelview.feature.parcels.ParcelsList
+import dev.parcelview.feature.parcels.impl.ParcelDetailScreen
+import dev.parcelview.feature.parcels.impl.ParcelsListScreen
+import dev.parcelview.feature.scanner.Scanner
+import dev.parcelview.feature.scanner.impl.ScannerScreen
+import dev.parcelview.feature.settings.Settings
+import dev.parcelview.feature.settings.impl.SettingsScreen
+
+private enum class Tab { PARCELS, SCANNER, SETTINGS }
 
 @Composable
 fun App() {
