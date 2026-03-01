@@ -1,4 +1,6 @@
-This is a Kotlin Multiplatform project targeting Android, iOS, Web.
+# ParcelView
+
+A Kotlin Multiplatform Mobile (KMM) package-tracking app targeting Android, iOS, and Web (best-effort). The UI is built with Compose Multiplatform.
 
 * [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
   It contains several subfolders:
@@ -52,6 +54,49 @@ in your IDE's toolbar or run it directly from the terminal:
 
 To build and run the development version of the iOS app, use the run configuration from the run widget
 in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+
+---
+
+## Architecture
+
+> Full details for contributors and Claude: see [CLAUDE.md](./CLAUDE.md).
+
+### Stack
+
+| Concern | Choice |
+|---|---|
+| UI | Compose Multiplatform |
+| Navigation | `androidx.navigation3` |
+| DI | Koin (`koin-core`, `koin-compose`, `koin-compose-viewmodel`) |
+| State | MVI — ViewModel + StateFlow |
+
+### Module structure
+
+```
+parcelview-mobile/
+├── composeApp/          # App shell: entry points, root DI init, nav host
+├── core/
+│   ├── core-ui/         # Shared theme and design system components
+│   └── core-navigation/ # NavKey base, shared nav utilities
+└── feature/
+    ├── parcels/
+    │   ├── public/      # NavKeys, data classes, repository interfaces
+    │   └── impl/        # ViewModel, screens, repo impl, Koin module
+    ├── scanner/
+    │   ├── public/
+    │   └── impl/
+    └── settings/
+        ├── public/
+        └── impl/
+```
+
+**Dependency direction:** `composeApp → feature:*:impl → feature:*:public → core:*`
+
+Feature `impl` modules may depend on other features' `public` modules, but **never** on another feature's `impl`.
+
+### MVI pattern
+
+Each screen has one ViewModel with three sealed classes: `UiState` (what to render), `UiEvent` (inputs from UI), and `UiAction` (one-time side effects like navigation or toasts). See [CLAUDE.md](./CLAUDE.md) for the full pattern with code examples.
 
 ---
 
