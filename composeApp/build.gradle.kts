@@ -54,6 +54,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.androidx.nav3.ui)
+            implementation(libs.compose.material.icons)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
