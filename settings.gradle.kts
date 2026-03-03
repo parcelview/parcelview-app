@@ -28,6 +28,7 @@ dependencyResolutionManagement {
     }
 }
 
+include(":androidApp")
 include(":composeApp")
 include(":feature:parcels:public")
 include(":feature:parcels:impl")

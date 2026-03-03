@@ -1,22 +1,21 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.androidKmpLibrary)
     alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
+    androidLibrary {
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        namespace = "com.parcelview.app.composeapp"
+        experimentalProperties["android.experimental.kmp.enableAndroidResources"] = true
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -57,12 +56,12 @@ kotlin {
             implementation(libs.compose.material.icons)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
-            implementation(project(":feature:parcels:public"))
-            implementation(project(":feature:parcels:impl")) // Update in next PR when we have interface entries
-            implementation(project(":feature:scanner:public"))
-            implementation(project(":feature:scanner:impl")) // Update in next PR when we have interface entries
-            implementation(project(":feature:settings:public"))
-            implementation(project(":feature:settings:impl")) // Update in next PR when we have interface entries
+            implementation(projects.feature.parcels.public)
+            implementation(projects.feature.parcels.impl) // Update in next PR when we have interface entries
+            implementation(projects.feature.scanner.public)
+            implementation(projects.feature.scanner.impl) // Update in next PR when we have interface entries
+            implementation(projects.feature.settings.public)
+            implementation(projects.feature.settings.impl) // Update in next PR when we have interface entries
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -71,36 +70,5 @@ kotlin {
             implementation(libs.navigation3.browser)
         }
     }
-}
-
-android {
-    namespace = "dev.parcelview.app"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-        applicationId = "dev.parcelview.app"
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
-
-dependencies {
-    debugImplementation(libs.compose.uiTooling)
 }
 
