@@ -2,6 +2,7 @@ package dev.parcelview.app
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
@@ -45,7 +46,7 @@ fun App() {
                             backStack.clear()
                             backStack.add(ParcelsList)
                         },
-                        icon = { Icon(Icons.Default.List, contentDescription = "Parcels") },
+                        icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Parcels") },
                         label = { Text("Parcels") }
                     )
                     NavigationBarItem(
