@@ -198,11 +198,43 @@ Navigation uses `androidx.navigation3`. Each feature's **public** module defines
 
 ```kotlin
 // feature/parcels/public/src/commonMain/kotlin/.../ParcelsNavKeys.kt
-@Serializable object ParcelsList : NavKey
+@Serializable data object ParcelsList : NavKey
 @Serializable data class ParcelDetail(val trackingId: String) : NavKey
 ```
 
 The nav graph is assembled in `composeApp` and delegates rendering to the feature's screen Composables (from `impl`).
+
+### Nav3 Actual Usage Patterns
+
+Navigation is driven by a `SnapshotStateList<Any>` backStack that is the single source of truth:
+
+```kotlin
+val backStack = remember { mutableStateListOf<Any>(ParcelsList) }
+
+NavDisplay(
+    backStack = backStack,
+    onBack = { if (backStack.size > 1) backStack.removeLastOrNull() },
+    entryProvider = { key ->
+        when (key) {
+            is ParcelsList -> NavEntry(key) { ParcelsListScreen(onParcelClick = { id -> backStack.add(ParcelDetail(id)) }) }
+            is ParcelDetail -> NavEntry(key) { ParcelDetailScreen(trackingId = key.trackingId, onBack = { backStack.removeLastOrNull() }) }
+            is Scanner -> NavEntry(key) { ScannerScreen() }
+            is Settings -> NavEntry(key) { SettingsScreen() }
+            else -> error("Unknown route: $key")
+        }
+    }
+)
+```
+
+**Key rules:**
+- `NavDisplay` + `entryProvider` lambda — not a registry, not routes. The lambda is called with each key in the backStack.
+- `backStack: SnapshotStateList<Any>` is the single source of truth for nav state.
+- `NavEntry(key) { Composable }` wraps each screen.
+- NavKeys are `@Serializable data object` / `data class` in the feature's **public** module.
+- Tab switching clears the backStack entirely, then adds the tab root key.
+- Back navigation pops the backStack (remove last item).
+- `Tab` enum lives in `composeApp` (it is app-shell state, not a NavKey — no feature module should reference it).
+- The `entryProvider` lambda in `App.kt` is the **only** place that maps NavKeys → screen Composables; it imports screens from `feature:*:impl`.
 
 ---
 
@@ -232,8 +264,8 @@ The nav graph is assembled in `composeApp` and delegates rendering to the featur
 
 ---
 
-## Current State (as of initial scaffold)
+## Current State
 
-The project currently has a **single `:composeApp` module** with no DI, no ViewModels, and state managed locally in Composables. The feature module split and Koin integration are planned but not yet implemented. Migration happens incrementally — one feature at a time — following the patterns above.
+The feature module structure (public/impl split) and Koin DI are implemented. All three features (parcels, scanner, settings) have their `public` + `impl` Gradle modules with stub ViewModels (MVI structure in place, business logic is a TODO). Nav3 is fully wired in `composeApp/App.kt`. Screens currently use callback parameters for navigation (not yet wired through UiAction); full MVI navigation is a future task.
 
 When adding a new feature, always create the `public` + `impl` modules from the start, even if the feature is simple.
