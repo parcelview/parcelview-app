@@ -33,9 +33,15 @@ dependencyResolutionManagement {
 
 include(":androidApp")
 include(":composeApp")
-include(":feature:parcels:public")
-include(":feature:parcels:impl")
-include(":feature:scanner:public")
-include(":feature:scanner:impl")
-include(":feature:settings:public")
-include(":feature:settings:impl")
+
+file("feature").listFiles()
+    ?.filter { it.isDirectory }
+    ?.forEach { feature ->
+        feature.listFiles()
+            ?.filter {
+                it.isDirectory && it.name in listOf("public", "impl") // add submodule names here
+            }
+            ?.forEach { module ->
+                include(":feature:${feature.name}:${module.name}")
+            }
+    }
